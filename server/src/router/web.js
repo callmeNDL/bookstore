@@ -11,6 +11,9 @@ let initWebRouters = (app) => {
     router.get('/ndl', (req, res) => {
         return res.send('rest api ndl ')
     })
+    router.get('/quocpham', (req, res) => {
+        return res.send('Pham anh quoc ')
+    })
 
 
 
