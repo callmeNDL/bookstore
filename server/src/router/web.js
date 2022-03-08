@@ -1,6 +1,6 @@
 import express from "express";
 import HomeController from "../controllers/homeController";
-
+import UserController from "../controllers/UserController"
 
 let router = express.Router();
 
@@ -11,9 +11,10 @@ let initWebRouters = (app) => {
     router.get('/ndl', (req, res) => {
         return res.send('rest api ndl ')
     })
-    router.get('/quocpham', (req, res) => {
-        return res.send('Pham anh quoc ')
-    })
+
+
+    //api get user with login
+    router.post('/api/login', UserController.handleLogin)
 
 
 
