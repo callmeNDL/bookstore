@@ -3,8 +3,8 @@ import axios from "../axios"
 
 
 
-const handleLoginApi = (email, password) => {
-    return axios.post('api/login', { email, password });
+const handleLoginApi = (Inputemail, Inputpassword) => {
+    return axios.post('api/login', { email: Inputemail, password: Inputpassword });
 }
 
 export { handleLoginApi }
