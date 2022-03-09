@@ -15,9 +15,12 @@ let initWebRouters = (app) => {
 
     //api get user with login
     router.post('/api/login', UserController.handleLogin)
-
-
-
+    //api get all user
+    router.get('/api/get-all-users', UserController.handleGetAllUsers)
+    // api get all Book
+    router.get('/api/get-all-books', UserController.handleGetAllBooks)
+    //api get all Loai
+    router.get('/api/get-all-loais', UserController.handleGetAllLoais)
 
     return app.use("/", router);
 }

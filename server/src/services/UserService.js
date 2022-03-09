@@ -40,8 +40,6 @@ let handleUserLogin = (email, password) => {
     })
 
 }
-
-
 let checkUserEmail = (InputEmail) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -58,6 +56,41 @@ let checkUserEmail = (InputEmail) => {
         }
     })
 }
+
+let getAllUsers = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = await db.User.findAll();
+            resolve(users);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+let getAllBooks = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let books = await db.Book.findAll();
+            resolve(books);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+let getAllLoais = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let loais = await db.Loai.findAll();
+            resolve(loais);
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
 module.exports = {
-    handleUserLogin: handleUserLogin
+    handleUserLogin: handleUserLogin,
+    getAllUsers: getAllUsers,
+    getAllBooks: getAllBooks,
+    getAllLoais: getAllLoais
+
 }
