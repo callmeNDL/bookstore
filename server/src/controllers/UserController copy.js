@@ -1,6 +1,4 @@
 import UserService from '../services/UserService'
-
-
 let handleLogin = async (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
@@ -27,12 +25,13 @@ let handleGetAllUsers = async (req, res) => {
         users
     })
 }
-let handleGetAllBooks = async (req, res) => {
-    let books = await UserService.getAllBooks();
+let handleAdminGetAllUsers = async (req, res) => {
+    //let id = req.body.id;// Truyền ALL để lấy tất cả || id để lấy cụ thể
+    let users = await UserService.adminGetAllUsers();
     return res.status(200).json({
         errCode: 0,
-        message: 'GET ALL BOOK SUCCESS',
-        books
+        message: 'GET ALL USER SUCCESS',
+        users
     })
 }
 let handleGetAllLoais = async (req, res) => {
@@ -43,58 +42,36 @@ let handleGetAllLoais = async (req, res) => {
         loais
     })
 }
-let handleGetBook = async (req, res) => {
-    let id = req.query.id;
-    if (!id) {
-        return res.status(500).json({
-            errCode: 1,
-            message: 'Missing inputs parameter!'
-
-        })
-    }
-
-    let book = await UserService.getBook(id);
-
-    return res.status(200).json({
-        errCode: 0,
-        message: 'GET ALL LOAI SUCCESS',
-        book
-    })
-
-
-
-}
-let handleCreateBook = async (req, res) => {
-    let message = await UserService.createBook(req.body);
+let handleCreateNewUser = async (req, res) => {
+    let message = await UserService.createNewUser(req.body);
     return res.status(200).json(message);
 }
-let handleDeleteBook = async (req, res) => {
+let handleDeleteUser = async (req, res) => {
     if (!req.body.id) {
         return res.status(200).json({
             errCode: 1,
             errMessage: 'Missing required parameters!',
-
-
         })
     } else {
-        let message = await UserService.deleteBook(req.body.id);
-
+        let message = await UserService.deleteUser(req.body.id);
         return res.status(200).json(message);
-
     }
+
 }
-let handleEditBook = async (req, res) => {
+let handleEditUser = async (req, res) => {
     let data = req.body;
-    let message = await UserService.editBook(data);
+    let message = await UserService.updateUserData(data);
     return res.status(200).json(message)
+
 }
+
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllUsers: handleGetAllUsers,
-    handleGetAllBooks: handleGetAllBooks,
     handleGetAllLoais: handleGetAllLoais,
-    handleGetBook: handleGetBook,
-    handleCreateBook: handleCreateBook,
-    handleDeleteBook: handleDeleteBook,
-    handleEditBook: handleEditBook
+    handleCreateNewUser: handleCreateNewUser,
+    handleDeleteUser: handleDeleteUser,
+    handleEditUser: handleEditUser,
+    handleAdminGetAllUsers: handleAdminGetAllUsers
+
 }

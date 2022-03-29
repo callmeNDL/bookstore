@@ -6,7 +6,7 @@ let handleUserLogin = (email, password) => {
             let userData = {};
             let userIsExist = await checkUserEmail(email);
             if (userIsExist) {
-                //user already exist ( da ton tai email nay)
+                //user already exist ( da ton tai email nay)x
                 //compare password
                 let user = await db.User.findOne({
                     where: { email: email },
@@ -71,11 +71,12 @@ let getAllUsers = () => {
         }
     })
 }
-let getAllBooks = () => {
+let adminGetAllUsers = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            let books = await db.Book.findAll();
-            resolve(books);
+            let users = await db.User.findAll({
+            });
+            resolve(users);
         } catch (error) {
             reject(error);
         }
@@ -91,75 +92,70 @@ let getAllLoais = () => {
         }
     })
 }
-let getBook = (id) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            let book = '';
-            if (id === 'ALL') {
-                book = await db.Book.findAll();
-            }
-            if (id && id !== 'ALL') {
-                book = await db.Book.findOne({
-                    where: { id: id }
-                });
 
-            }
-            resolve(book);
-        } catch (e) {
-            reject(e);
-        }
-    })
-}
-let createBook = (data) => {
+let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            await db.Book.create({
-                masach: data.masach,
-                tensach: data.tensach,
-                mota: data.mota,
-                gia: data.gia,
-                hinh: data.hinh,
-                manxb: data.manxb,
-                maloai: data.maloai
-            })
+
+            //check email in exist??
+            let check = await checkUserEmail(data.email);
+            if (check === true) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "your email is already used, Plz try other email!"
+                })
+            }
+            else {
+                console.log(data);
+
+                await db.User.create({
+
+                    email: data.email,
+                    password: data.password,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    gender: data.gender,
+                    roleId: data.roleId,
+                })
+            }
             resolve({
                 errCode: 0,
                 errMessage: 'OK'
             })
-        } catch (error) {
-            reject(error);
+        } catch (e) {
+            reject(e)
         }
     })
 }
-let deleteBook = (id) => {
-
+let deleteUser = (userId) => {
+    //console.log('check userID',userId);
     return new Promise(async (resolve, reject) => {
         //check id
         try {
-            let book = await db.Book.findOne({
-                where: { id: id },
+            let user = await db.User.findOne({
+                where: { id: userId },
                 raw: false
             })
-            if (!book) {
+            if (!user) {
                 resolve({
                     errCode: 2,
-                    errMessage: "book is not exist"
+                    errMessage: "the user is not exist"
                 })
             } else {
-                await book.destroy();
+                await user.destroy();
             }
             resolve({
                 errCode: 0,
-                errMessage: "The book is delete"
+                errMessage: "The User is delete"
             })
 
         } catch (e) {
             reject(e)
         }
-        re
     })
 }
-let editBook = (data) => {
+let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -169,28 +165,34 @@ let editBook = (data) => {
                     errMessage: "Messing requited parameter"
                 });
             }
-            let book = await db.Book.findOne({
+            let user = await db.User.findOne({
                 where: { id: data.id },
                 raw: false,
             });
-            if (book) {
+            if (user) {
+                //             email: DataTypes.STRING,
+                // password: DataTypes.STRING,
+                // firstName: DataTypes.STRING,
+                // lastName: DataTypes.STRING,
+                // address: DataTypes.STRING,
+                // gender: DataTypes.BOOLEAN,
+                // roleId: DataTypes.STRING
+                user.firstName = data.firstName;
+                user.lastName = data.lastName;
+                user.address = data.address;
+                user.gender = data.gender;
+                user.roleId = data.roleId;
 
-                book.masach = data.masach,
-                    book.tensach = data.tensach,
-                    book.mota = data.mota,
-                    book.gia = data.gia,
-                    book.hinh = data.hinh,
-                    book.manxb = data.manxb,
-                    book.maloai = data.maloai
-                await book.save();
+
+                await user.save();
                 resolve({
                     errCode: 0,
-                    errMessage: "update Book success!"
+                    errMessage: "update user success!"
                 })
             } else {
                 resolve({
                     errCode: 1,
-                    errMessage: "Book not found!"
+                    errMessage: "User not found!"
                 });
             }
 
@@ -202,11 +204,10 @@ let editBook = (data) => {
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUsers: getAllUsers,
-    getAllBooks: getAllBooks,
     getAllLoais: getAllLoais,
-    getBook: getBook,
-    createBook: createBook,
-    deleteBook: deleteBook,
-    editBook: editBook
+    createNewUser: createNewUser,
+    deleteUser: deleteUser,
+    updateUserData: updateUserData,
+    adminGetAllUsers: adminGetAllUsers
 
 }
